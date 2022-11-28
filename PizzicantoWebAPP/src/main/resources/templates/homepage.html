@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pizzicanto</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<h1>Pizzicanto</h1>
+<form th:method="POST" th:action="@{/Pizzicanto}">
+<label>Select state:
+    <select>
+        <option name="state" th:each="pizzeria: ${pizzerias}" th:text="${pizzeria.state}" th:value="${pizzeria.id}"></option>
+    </select>
+</label>
+<br>
+<label>Select city:
+    <select>
+        <option name="city" th:each="pizzeria: ${pizzerias}" th:text="${pizzeria.city}" th:value="${pizzeria.id}"></option>
+    </select>
+</label><br>
+<label >Select pizzeria:
+    <select>
+        <option name="pizzeria" th:each="pizzeria: ${pizzerias}" th:text="${pizzeria.name}" th:value="${pizzeria.id}"></option>
+    </select>
+</label>
+<br>
+<input type="submit" value="Find location">
+</form>
+</body>
+</html>
+
