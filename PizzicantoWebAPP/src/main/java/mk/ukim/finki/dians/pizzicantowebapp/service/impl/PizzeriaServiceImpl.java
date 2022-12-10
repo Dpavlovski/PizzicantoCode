@@ -23,4 +23,14 @@ public class PizzeriaServiceImpl implements PizzeriaService {
     public List<Pizzeria> getPizzerias(){
         return pizzeriaRepository.getPizzerias();
     }
+
+    @Override
+    public List<String> getStates() {
+        return pizzeriaRepository.getStates();
+    }
+
+    @Override
+    public List<String> getCitiesInState(String state) {
+        return pizzeriaRepository.getCitiesInState(state);
+    }
 }

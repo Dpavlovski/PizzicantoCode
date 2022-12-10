@@ -3,12 +3,8 @@ package mk.ukim.finki.dians.pizzicantowebapp.controller;
 import mk.ukim.finki.dians.pizzicantowebapp.model.Pizzeria;
 import mk.ukim.finki.dians.pizzicantowebapp.service.PizzeriaService;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,14 +18,24 @@ public class PizzeriaController {
     }
 
     @GetMapping
-    public String getPizzeriaPage(Model model) {
+    public String getPizzeriaPage(
+            @PathVariable(required = false) String state,
+            @PathVariable(required = false) String city,
+            Model model) {
         List<Pizzeria> pizzerias = pizzeriaService.getPizzerias();
-        model.addAttribute("pizzerias", pizzerias);
+        model.addAttribute("states",pizzeriaService.getStates());
         return "homepage";
     }
 
-    @PostMapping
-    public String showMap(@RequestParam String state,@RequestParam String city,@RequestParam String pizzeria ){
-        return "homepage";
+    @PostMapping("/setCities/{state}")
+    public String afterSelectingState(@PathVariable String state,Model model){
+        model.addAttribute("cities",pizzeriaService.getCitiesInState(state));
+        return "redirect:/Pizzicanto/"+state;
+    }
+
+    @PostMapping("/setPizzerias/")
+    public String afterSelectingCity(@RequestParam String state,@RequestParam String city,Model model){
+        model.addAttribute("pizzerias",pizzeriaService.getPizzeriasInCity(state,city));
+        return "redirect:/Pizzicanto/"+state+'/'+city;
     }
 }

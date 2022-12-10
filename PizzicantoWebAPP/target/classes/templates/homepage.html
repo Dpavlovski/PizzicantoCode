@@ -1,30 +1,50 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Pizzicanto</title>
-    <meta charset="utf-8"/>
+    <meta charset="UTF-8">
+    <link href="../static/homepageStyle.css" rel="stylesheet">
 </head>
 <body>
-<h1>Pizzicanto</h1>
-<form th:method="POST" th:action="@{/Pizzicanto}">
-<label>Select state:
-    <select>
-        <option name="state" th:each="pizzeria: ${pizzerias}" th:text="${pizzeria.state}" th:value="${pizzeria.id}"></option>
+<div class="container1">
+<div class="favor">
+    <br>
+    <br>
+    <p>May the pizza be ever in your favor!</p>
+</div>
+<div class="SelectDiv">
+<form th:method="POST" th:action="@{'/Pizzicanto/setCities/{state}' (state=state)}">
+    <label id="stateLabel" for="state">Select your state:
+        <select id="State" onchange="this.form.submit()">
+            <option name="state" th:each="state: ${states}" th:text="${state}" th:value="${state}"></option>
+        </select>
+    </label>
+</form>
+</div>
+<div class="SelectDiv">
+    <label for="City">Select your city: </label>
+    <select name="City" id="City">
+        <option name="city" th:each="city: ${cities}" th:text="${city}" th:value="${city}"></option>
     </select>
-</label>
-<br>
-<label>Select city:
-    <select>
-        <option name="city" th:each="pizzeria: ${pizzerias}" th:text="${pizzeria.city}" th:value="${pizzeria.id}"></option>
-    </select>
-</label><br>
-<label >Select pizzeria:
-    <select>
+</div>
+<div class="Random">
+    <p>Click the button to get a random pizzeria!</p>
+</div>
+<button class="button1" type="button">Random</button>
+
+<div class="Own">
+    <label for="Own">or <br> Select your own pizzeria: </label>
+    <select class="Own_dropdown" name="Own" id="Own">
         <option name="pizzeria" th:each="pizzeria: ${pizzerias}" th:text="${pizzeria.name}" th:value="${pizzeria.id}"></option>
     </select>
-</label>
-<br>
-<input type="submit" value="Find location">
-</form>
+</div>
+    <br><br>
+<button class="button2" type="button">Get Directions</button>
+</div>
+
+<div id="map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d74171.57476884575!2d-92.38524949021674!3d34.756815342741156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x87d2a134a11f569b%3A0x3405f5100df35b17!2sLittle%20Rock!3m2!1d34.744461799999996!2d-92.2880157!4m5!1s0x87d2a14c87243ca7%3A0x4a9d3bc3694a7297!2sShotgun%20Dan&#39;s%20Pizza%20-%20Little%20Rock%2C%2010923%20W%20Markham%20St%2C%20Little%20Rock%2C%20AR%2072211%2C%20United%20States!3m2!1d34.7533196!2d-92.3958296!5e0!3m2!1sen!2smk!4v1670682946192!5m2!1sen!2smk" width="900" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
 </body>
 </html>
-

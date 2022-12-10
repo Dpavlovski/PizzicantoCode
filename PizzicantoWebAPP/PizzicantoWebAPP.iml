@@ -93,5 +93,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:6.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:6.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.9.0" level="project" />
+    <orderEntry type="library" name="mapbox-gl" level="application" />
+    <orderEntry type="library" name="mapbox-gl-directions" level="application" />
   </component>
 </module>
