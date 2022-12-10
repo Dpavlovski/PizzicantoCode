@@ -1,12 +1,8 @@
 package mk.ukim.finki.dians.pizzicantowebapp.controller;
-
-import mk.ukim.finki.dians.pizzicantowebapp.model.Pizzeria;
 import mk.ukim.finki.dians.pizzicantowebapp.service.PizzeriaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/Pizzicanto")
@@ -19,23 +15,34 @@ public class PizzeriaController {
 
     @GetMapping
     public String getPizzeriaPage(
-            @PathVariable(required = false) String state,
-            @PathVariable(required = false) String city,
+            @RequestParam(required = false) String randomClicked,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String city,
             Model model) {
-        List<Pizzeria> pizzerias = pizzeriaService.getPizzerias();
         model.addAttribute("states",pizzeriaService.getStates());
+        model.addAttribute("randomClicked",Boolean.parseBoolean(randomClicked));
+        if(state!=null){
+            model.addAttribute("cities",pizzeriaService.getCitiesInState(state));
+            if(city!=null)
+                model.addAttribute("pizzerias",pizzeriaService.getPizzeriasInCity(state,city));
+        }
         return "homepage";
     }
 
-    @PostMapping("/setCities/{state}")
-    public String afterSelectingState(@PathVariable String state,Model model){
-        model.addAttribute("cities",pizzeriaService.getCitiesInState(state));
-        return "redirect:/Pizzicanto/"+state;
+
+    @PostMapping("/setCities")
+    public String afterSelectingState(@RequestParam String state){
+        return "redirect:/Pizzicanto?state="+state;
     }
 
-    @PostMapping("/setPizzerias/")
-    public String afterSelectingCity(@RequestParam String state,@RequestParam String city,Model model){
-        model.addAttribute("pizzerias",pizzeriaService.getPizzeriasInCity(state,city));
-        return "redirect:/Pizzicanto/"+state+'/'+city;
+    @PostMapping("/setPizzerias")
+    public String afterSelectingCity(@RequestParam String city,Model model){
+        String state=model.getAttribute("state").toString();
+        return "redirect:/Pizzicanto?state="+state+"&city="+city;
+    }
+
+    @PostMapping("/Random")
+    public String RandomMap(){
+        return "redirect:/Pizzicanto?randomClicked=true";
     }
 }
