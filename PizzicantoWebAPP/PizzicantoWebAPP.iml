@@ -95,5 +95,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.9.0" level="project" />
     <orderEntry type="library" name="mapbox-gl" level="application" />
     <orderEntry type="library" name="mapbox-gl-directions" level="application" />
+    <orderEntry type="library" name="ol" level="application" />
+    <orderEntry type="library" name="leaflet" level="application" />
+    <orderEntry type="library" name="leaflet-routing-machine" level="application" />
   </component>
 </module>

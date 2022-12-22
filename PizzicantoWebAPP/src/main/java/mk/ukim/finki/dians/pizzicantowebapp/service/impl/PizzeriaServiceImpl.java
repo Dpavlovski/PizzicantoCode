@@ -5,6 +5,7 @@ import mk.ukim.finki.dians.pizzicantowebapp.repository.PizzeriaRepository;
 import mk.ukim.finki.dians.pizzicantowebapp.service.PizzeriaService;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PizzeriaServiceImpl implements PizzeriaService {
@@ -16,21 +17,26 @@ public class PizzeriaServiceImpl implements PizzeriaService {
 
     @Override
     public List<Pizzeria> getPizzeriasInCity(String state, String city){
-        return pizzeriaRepository.getPizzeriasInCity(state, city);
+        return pizzeriaRepository.findPizzeriasByStateAndCity(state, city);
     }
 
     @Override
     public List<Pizzeria> getPizzerias(){
-        return pizzeriaRepository.getPizzerias();
+        return pizzeriaRepository.findPizzerias();
     }
 
     @Override
     public List<String> getStates() {
-        return pizzeriaRepository.getStates();
+        return pizzeriaRepository.findStates();
     }
 
     @Override
     public List<String> getCitiesInState(String state) {
-        return pizzeriaRepository.getCitiesInState(state);
+        return pizzeriaRepository.findCitiesByState(state);
+    }
+
+    @Override
+    public Optional<Pizzeria> getPizzeriaById(Long Id) {
+        return pizzeriaRepository.findPizzeriaById(Id);
     }
 }

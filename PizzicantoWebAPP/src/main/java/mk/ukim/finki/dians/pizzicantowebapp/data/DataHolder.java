@@ -16,7 +16,7 @@ public class DataHolder {
         BufferedReader reader;
         pizzerias = new ArrayList<>();
             try {
-                reader = new BufferedReader(new FileReader("src/main/resources/static/data.csv"));
+                reader = new BufferedReader(new FileReader("src/main/resources/static/databazapica2.csv"));
                 pizzerias=reader.lines().map(Pizzeria::new).toList();
             } catch (IOException e) {
                 throw new RuntimeException(e);

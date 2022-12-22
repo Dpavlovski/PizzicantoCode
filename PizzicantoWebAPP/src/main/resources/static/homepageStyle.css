@@ -82,10 +82,10 @@ body {
 }
 .container1{
     text-align: center;
-    width: 500px;
     display: inline-block;
     position: relative;
-    top: 130px;
+    width: 670px;
+    top: 160px;
     left: 90px;
 }
 #map {

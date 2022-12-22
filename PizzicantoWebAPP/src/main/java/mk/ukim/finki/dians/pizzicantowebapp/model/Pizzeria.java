@@ -12,6 +12,9 @@ public class Pizzeria {
     private String state;
     private String name;
 
+    private String longitude;
+    private String latitude;
+
     private final String country="United States";
 
     public Pizzeria(String line) {
@@ -21,5 +24,7 @@ public class Pizzeria {
         city = line.split(",")[1];
         postCode = line.split(",")[2];
         state = line.split(",")[3];
+        latitude=line.split(",")[6];
+        longitude=line.split(",")[7];
     }
 }
