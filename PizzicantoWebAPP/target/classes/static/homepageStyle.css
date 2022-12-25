@@ -56,10 +56,13 @@ body {
     padding-left: 25px;
     margin-left: 135px;
 }
+body > div.container1 > form:nth-child(4) > div:nth-child(3){
+    margin-left: 0;
+}
 #stateLabel{
     color: black;
 }
- select{
+select{
     margin-left: 20px;
 }
 .Random{
@@ -84,7 +87,7 @@ body {
     text-align: center;
     display: inline-block;
     position: relative;
-    width: 670px;
+    width: 710px;
     top: 160px;
     left: 90px;
 }

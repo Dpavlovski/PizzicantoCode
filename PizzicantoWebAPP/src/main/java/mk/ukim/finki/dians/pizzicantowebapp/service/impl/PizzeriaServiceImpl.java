@@ -39,4 +39,9 @@ public class PizzeriaServiceImpl implements PizzeriaService {
     public Optional<Pizzeria> getPizzeriaById(Long Id) {
         return pizzeriaRepository.findPizzeriaById(Id);
     }
+
+    @Override
+    public Pizzeria getPizzeriaByStateAndCityAndName(String state, String city, String name) {
+        return pizzeriaRepository.findPizzeriaByStateAndByCityAndByName(state,city,name);
+    }
 }

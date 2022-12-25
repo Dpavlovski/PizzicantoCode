@@ -6,14 +6,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
 public class PizzeriaRepository {
     public List<Pizzeria> findPizzeriasByStateAndCity(String state, String city) {
-        return DataHolder.pizzerias.stream().filter(p->p.getCity().equals(city) && p.getState().equals(state))
+        return DataHolder.pizzerias.stream().filter(p->p.getCity().equals(city) && p.getState().equals(state)).distinct()
                 .collect(Collectors.toList());
     }
 
@@ -33,6 +32,10 @@ public class PizzeriaRepository {
     }
     public Optional<Pizzeria> findPizzeriaById(Long Id) {
         return DataHolder.pizzerias.stream().filter(p->p.getId().equals(Id)).findFirst();
+    }
+
+    public Pizzeria findPizzeriaByStateAndByCityAndByName(String state,String city,String name){
+        return findPizzeriasByStateAndCity(state,city).stream().filter(p->p.getName().equals(name)).findFirst().get();
     }
 
 }

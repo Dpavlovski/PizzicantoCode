@@ -10,4 +10,5 @@ public interface PizzeriaService {
     List<String> getStates();
     List<String> getCitiesInState(String state);
     Optional<Pizzeria> getPizzeriaById(Long Id);
+    Pizzeria getPizzeriaByStateAndCityAndName(String state, String city,String name);
 }
