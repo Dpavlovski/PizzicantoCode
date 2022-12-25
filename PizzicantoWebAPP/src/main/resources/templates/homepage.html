@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+            crossorigin=""></script>
+    <script src="https://openlayers.org/en/v6.4.3/build/ol.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <title>Pizzicanto</title>
+    <meta charset="UTF-8">
+    <link href="../static/homepageStyle.css" rel="stylesheet">
+</head>
+<body>
+<div class="container1" style="width: 670px">
+    <div class="favor">
+        <br>
+        <br>
+        <p>May the pizza be ever in your favor!</p>
+    </div>
+    <div class="Random">
+    <p>Click the button to get a random pizzeria!</p>
+   </div>
+
+    <form th:method="POST" th:action="@{/Pizzicanto/Random}">
+        <button th:type="submit" class="button1" type="button">Random</button>
+      </form>
+
+    <form th:method="POST" th:action="@{/Pizzicanto/GetDirections}">
+    <div class="SelectDiv">
+
+             <label id="stateLabel" for="stateSelect">or<br>Select your state:
+              <select id="stateSelect" name="stateSelect">
+                <option th:each="state: ${states}" th:value="${state}" th:text="${state}"></option>
+              </select>
+             </label>
+             <br>
+    </div>
+        <div class="SelectDiv">
+            <label for="citySelect">Select your City:
+                <select id="citySelect" name="citySelect" disabled>
+                 <option value=""></option>
+                </select>
+             </label>
+        </div>
+        <div class="SelectDiv">
+            <label for="pizzeriaSelect">Select your pizzeria:
+            <select id="pizzeriaSelect" name="pizzeriaSelect" disabled>
+                <option value=""></option>
+            </select>
+            </label>
+        </div>
+        <br>
+
+    <br><br>
+       <input type="submit" id="route" class="button2" value="Get Directions">
+    </form>
+</div>
+<script>
+    document.getElementById('stateSelect').addEventListener('change', function() {
+        const selectedState = this.options[this.selectedIndex].value;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Pizzicanto/setCities');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Update the options in the second select element with the returned data
+                const cities = JSON.parse(xhr.responseText);
+                const citySelect = document.getElementById('citySelect');
+                citySelect.innerHTML = '';
+                for (let i = 0; i < cities.length; i++) {
+                    const option = document.createElement('option');
+                    option.value = cities[i];
+                    option.text = cities[i];
+                    citySelect.add(option);
+                }
+                citySelect.disabled = false;
+            }
+        };
+        xhr.send(`state=${selectedState}`)
+    })
+
+
+    document.getElementById('citySelect').addEventListener('change', function() {
+        // Get the selected options from the first and second select elements
+        const selectedState = document.getElementById('stateSelect').value;
+        const selectedCity = this.options[this.selectedIndex].value;
+
+        // Send an AJAX request to the server to get the list of pizzerias in the selected city
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Pizzicanto/setPizzerias');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Update the options in the third select element with the returned data
+                const pizzerias = JSON.parse(xhr.responseText);
+                const pizzeriaSelect = document.getElementById('pizzeriaSelect');
+                pizzeriaSelect.innerHTML = '';
+                for (let i = 0; i < pizzerias.length; i++) {
+                    const option = document.createElement('option');
+                    option.value = pizzerias[i];
+                    option.text = pizzerias[i];
+                    pizzeriaSelect.add(option);
+                }
+                pizzeriaSelect.disabled = false;
+            }
+        };
+        xhr.send(`state=${selectedState}&city=${selectedCity}`);
+    });
+
+</script>
+<div id="map" >
+    <th:block th:if="${random}==null">
+        <script>
+            var map = L.map('map').locate({setView: true, maxZoom: 16});
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: ''
+            }).addTo(map);
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+            }, function(error) {
+                console.error(error);
+            });
+        </script>
+    </th:block>
+    <th:block th:if="${random}!=null">
+        <script>
+            var latitude = [[${latitude}]];
+            var longitude = [[${longitude}]];
+            var map = L.map('map').setView([latitude, longitude], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: ''
+            }).addTo(map);
+            L.marker([latitude, longitude]).addTo(map);
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var start = L.latLng(position.coords.latitude, position.coords.longitude);
+                var end = L.latLng(latitude, longitude);
+                L.Routing.control({
+                    waypoints: [start, end]
+                }).addTo(map);
+            });
+        </script>
+    </th:block>
+    <th:block th:if="${selected}!=null">
+        <script>
+            var latitude = [[${la}]];
+            var longitude = [[${lo}]];
+            var map = L.map('map').setView([latitude, longitude], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: ''
+            }).addTo(map);
+            L.marker([latitude, longitude]).addTo(map);
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var start = L.latLng(position.coords.latitude, position.coords.longitude);
+                var end = L.latLng(latitude, longitude);
+                L.Routing.control({
+                    waypoints: [start, end]
+                }).addTo(map);
+            });
+        </script>
+    </th:block>
+</div>
+</body>
+</html>
